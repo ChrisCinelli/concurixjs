@@ -1,0 +1,17 @@
+{ 
+    "name" : "concurix"
+  , "description": "concurix node.js profiling"
+  , "version": "0.1.0"
+  , "keywords": ["profile", "trace", "performance", "realtime"]
+  , "main" : "index.js"
+  , "dependencies": { 
+      "ws": "0.4.x",
+      "string": "1.x.x",
+      "needle": "0.5.x",
+      "moment": "2.x.x",
+      "underscore": "1.x.x",
+      "aws-sdk": "1.2.x"
+    }
+  , "devDependencies": { }
+  , "engines": { "node": "*" }
+}
