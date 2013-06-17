@@ -4,6 +4,10 @@
   , "version": "0.1.0"
   , "keywords": ["profile", "trace", "performance", "realtime"]
   , "main" : "index.js"
+  , "repository" : {
+      "type" : "git",
+      "url" : "git@github.com:Concurix/concurixjs.git"
+    }
   , "dependencies": { 
       "ws": "0.4.x",
       "string": "1.x.x",
