@@ -1,5 +1,5 @@
 { 
-    "name" : "concurix"
+    "name" : "concurixjs"
   , "description": "concurix node.js profiling"
   , "version": "0.1.0"
   , "keywords": ["profile", "trace", "performance", "realtime"]
