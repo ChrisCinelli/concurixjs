@@ -20,7 +20,9 @@ For more information, visit [www.concurix.com](http://www.concurix.com).
 
 2. Run your app
  
- ```$ node --expose-debug-as=v8debug app.js```
+ ```
+ $ node --expose-debug-as=v8debug app.js
+ ```
 
 3. Visit [www.concurix.com/bench](http://www.concurix.com/bench) -> *Guest Project for Localhost* -> *Connect to realtime dashboard* to view performance graphs.
 
