@@ -18,6 +18,9 @@ For more information, visit [www.concurix.com](http://www.concurix.com).
  var tracer = require('concurix').tracer();
  ```
 
-2. Visit [www.concurix.com/bench](http://www.concurix.com/bench) -> *Guest Project for Localhost* -> *Connect to realtime dashboard* to view performance graphs.
+2. Run your app
+    $ node --expose-debug-as=v8debug app.js
+
+3. Visit [www.concurix.com/bench](http://www.concurix.com/bench) -> *Guest Project for Localhost* -> *Connect to realtime dashboard* to view performance graphs.
 
 Note that, by default, the online dashboard will try to connect  to ``http://localhost``. If you'd like to use anything other than ``localhost`` you should sign up for concurix.com and create your custom project.
