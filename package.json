@@ -14,7 +14,10 @@
       "needle": "0.5.x",
       "moment": "2.x.x",
       "underscore": "1.x.x",
-      "aws-sdk": "1.2.x"
+      "aws-sdk": "1.2.x",
+      "escodegen": "0.0.x",
+      "esprima": "1.0.x",
+      "estraverse": "1.1.x"
     }
   , "devDependencies": { }
   , "engines": { "node": "*" }
