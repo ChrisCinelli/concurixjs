@@ -1,24 +1,60 @@
-{ 
-    "name" : "concurixjs"
-  , "description": "Node.js Real-time Visual Profiler"
-  , "version": "0.1.4"
-  , "keywords": ["trace", "tracing", "tracer", "profile", "profiling", "profiler", "performance", "real-time", "analysis", "analytics", "bottlenecks", "data", "visualizer", "code diagram", "response time", "metrics"]
-  , "main" : "index.js"
-  , "repository" : {
-      "type" : "git",
-      "url" : "git@github.com:Concurix/concurixjs.git"
-    }
-  , "dependencies": { 
-      "ws": "0.4.x",
-      "string": "1.x.x",
-      "needle": "0.5.x",
-      "moment": "2.x.x",
-      "underscore": "1.x.x",
-      "aws-sdk": "1.2.x",
-      "escodegen": "0.0.x",
-      "esprima": "1.0.x",
-      "estraverse": "1.1.x"
-    }
-  , "devDependencies": { }
-  , "engines": { "node": "*" }
+{
+  "name": "concurixjs",
+  "description": "Node.js Real-time Visual Profiler",
+  "version": "0.1.4",
+  "keywords": [
+    "trace",
+    "tracing",
+    "tracer",
+    "profile",
+    "profiling",
+    "profiler",
+    "performance",
+    "real-time",
+    "realtime",
+    "analysis",
+    "analytics",
+    "bottlenecks",
+    "data",
+    "visualizer",
+    "code diagram",
+    "response time",
+    "metrics",
+    "concurix",
+    "multicore",
+    "manycore"
+  ],
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Concurix/concurixjs.git"
+  },
+  "dependencies": {
+    "ws": "0.4.x",
+    "string": "1.x.x",
+    "needle": "0.5.x",
+    "moment": "2.x.x",
+    "underscore": "1.x.x",
+    "aws-sdk": "1.2.x",
+    "escodegen": "0.0.x",
+    "esprima": "1.0.x",
+    "estraverse": "1.1.x"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": "*"
+  },
+  "readmeFilename": "README.md",
+  "gitHead": "c026ed9e5258ed449856b82f8d4ff761eb4ff53a",
+  "bugs": {
+    "url": "https://github.com/Concurix/concurixjs/issues"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Concurix Corporation",
+  "license": "Concurix Terms Of Service (http://www.concurix.com/tos_main)"
 }
