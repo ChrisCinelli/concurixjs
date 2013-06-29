@@ -1,7 +1,7 @@
 { 
     "name" : "concurixjs"
   , "description": "Node.js Real-time Visual Profiler"
-  , "version": "0.1.3"
+  , "version": "0.1.4"
   , "keywords": ["trace", "tracing", "tracer", "profile", "profiling", "profiler", "performance", "real-time", "analysis", "analytics", "bottlenecks", "data", "visualizer", "code diagram", "response time", "metrics"]
   , "main" : "index.js"
   , "repository" : {
