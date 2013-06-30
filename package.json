@@ -1,7 +1,7 @@
 {
   "name": "concurixjs",
   "description": "Node.js Real-time Visual Profiler",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "keywords": [
     "trace",
     "tracing",
@@ -55,6 +55,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Concurix Corporation",
-  "license": "Concurix Terms Of Service (http://www.concurix.com/tos_main)"
+  "homepage": "http://www.concurix.com",
+  "author": "Concurix Corporation, <support@concurix.com> (http://www.concurix.com)",
+  "licenses": [
+    {
+      "type":"Licensed under the Concurix Terms Of Service",
+      "url": "http://www.concurix.com/tos_main"
+    }]
 }
