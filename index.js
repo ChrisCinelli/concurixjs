@@ -29,7 +29,8 @@ function tracer(options){
     accountKey: '28164101-1362-769775-170247',
     hostname: os.hostname(),
     archiveSessionUrl: 'http://api.concurix.com/v1/bench/new_offline_run',
-    maxAge: 15
+    maxAge: 15,
+    useContext: 'true'
   };
   
   extend(defaultOptions, options);
