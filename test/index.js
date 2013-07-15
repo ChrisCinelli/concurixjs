@@ -32,7 +32,7 @@ tests.testWrapper = function testWrapper(doneCallback){
   var wrapped = wrap(addOne, null, function(trace){
     assert(trace.functionName === addOne.name);
     assert(trace.args.length === 1);
-  });
+  }, {});
 
   assert(wrapped(3) === 4);
   assert(addOne.prototype === wrapped.prototype);
@@ -49,8 +49,8 @@ tests.testTracer = function testTracer(doneCallback){
   
   //load module and check that exports are wrapped
   var testModule = require('./test_module');
-  assert(testModule.apiFunc.name === 'concurixProxy');
-  assert(testModule.subModule.apiFunc.name === 'concurixProxy');
+  assert(testModule.apiFunc.name === 'apiFunc');
+  assert(testModule.subModule.apiFunc.name === 'apiFunc');
   assert(testModule.callSubApiFunc() == 'apiFunc');
 
   //check that callbacks and return values are wrapped
@@ -58,7 +58,7 @@ tests.testTracer = function testTracer(doneCallback){
    return 'dummyCallback';
   }
   var ret = testModule.apiFuncWithCallback(callback);
-  assert(ret.name === 'concurixProxy');
+  assert(ret.name === 'dummyCallback');
   assert(ret.__concurix_wrapper_for__);
   assert(ret() === callback());
   assert(callback.__concurix_wrapped_by__ === ret);
@@ -77,12 +77,11 @@ tests.testTracerWithIheritance = function testTracerWithIheritance(doneCallback)
   var service = testModule.defineService(Service);
   obj = new service();
   
-  var config = require('./config.json').localhost;
   var AWS = require('aws-sdk');
       
   AWS.config.update({
-    accessKeyId: config.aws_access_key,
-    secretAccessKey: config.aws_secret_key
+    accessKeyId: 'dummyAccessId',
+    secretAccessKey: 'dummyaccessKey'
   });
   AWS.config.update({region: 'us-east-1'});
 
@@ -125,7 +124,7 @@ var proto = Object.getPrototypeOf(module);
 var origRequire = proto.require;
 
 function testEngine(testSteps){
-  try {
+  // try {
     if (testSteps.length == 0) {
       sleep(200);
       tracer.terminate();
@@ -142,10 +141,10 @@ function testEngine(testSteps){
       console.log('       PASSED');
       testEngine(testSteps.slice(1));
     });
-  } catch(e) {
-    console.log('FAILED with ', e);
-    testEngine(testSteps.slice(1));
-  }
+  // } catch(e) {
+  //   console.log('FAILED with ', e);
+  //   testEngine(testSteps.slice(1));
+  // }
 }
 
 //start testing
