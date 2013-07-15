@@ -11,7 +11,7 @@
 
 var assert = require('assert');
 var cluster = require('cluster');
-var concurix = require('../../concurix');
+var concurix = require('../index.js');
 var cxUtil = require('../lib/util.js');
 var log = cxUtil.log;
 var sleep = cxUtil.sleep;
@@ -77,7 +77,7 @@ tests.testTracerWithIheritance = function testTracerWithIheritance(doneCallback)
   var service = testModule.defineService(Service);
   obj = new service();
   
-  var config = require('../../config.json').localhost;
+  var config = require('./config.json').localhost;
   var AWS = require('aws-sdk');
       
   AWS.config.update({
