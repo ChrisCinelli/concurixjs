@@ -12,10 +12,9 @@
 'use strict';
 
 var os = require('os');
-var Agent = require('./lib/agent.js');
-var util = require('./lib/util.js');
+var Agent = require('./tracer/agent.js');
+var util = require('./tracer/util.js');
 var extend = util.extend;
-var log = util.log;
 
 exports.tracer = tracer;
 
