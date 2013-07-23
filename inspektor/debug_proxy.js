@@ -16,8 +16,6 @@
 
 var Ws = require('ws');
 var log = require('./util.js').log;
-var http = require('http');
-var connect = require('connect');
 var Domains = require('./domains');
 
 function DebugProxy(){
@@ -30,7 +28,6 @@ function DebugProxy(){
   
   this.debuggeeSock = null;
   this.frontendSock = null;
-  this.server = null;
   
   this.domains = new Domains({
     notify: this.sendToFrontend.bind(this),
@@ -41,16 +38,10 @@ function DebugProxy(){
 
 DebugProxy.prototype.onDebuggeeConnected = function onDebuggeeConnected(){
   log('onDebuggeeConnected');
-  
-  var app = connect();
-  // app.use(connect.logger('short'));
-  app.use(connect.static(__dirname + '/front-end'));
-
-  this.server = http.createServer(app).listen(this.frontendPort, '0.0.0.0');
-  
+    
   // start websockets server for the frontend
   this.wss = new Ws.Server({
-    server: this.server
+    port: this.frontendPort
   });
 
   log('starting front-end server, port = ', this.frontendPort);
