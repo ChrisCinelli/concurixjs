@@ -12,7 +12,7 @@
 'use strict';
 
 var os = require('os');
-var Agent = require('./tracer/agent.js');
+var Tracer = require('./tracer');
 var util = require('./tracer/util.js');
 var extend = util.extend;
 
@@ -33,10 +33,10 @@ function tracer(options){
   };
   
   extend(defaultOptions, options);
-  var agent = new Agent(defaultOptions);
+  var tracer = new Tracer(defaultOptions);
   return {
-    stop: function(){ agent.pauseTracer() },
-    start: function(){ agent.resumeTracer() },
-    terminate: function(){ agent.terminate() }
+    stop: function(){ tracer.pauseTracer() },
+    start: function(){ tracer.resumeTracer() },
+    terminate: function(){ tracer.terminate() }
   };
 }
