@@ -16,19 +16,24 @@ var Agent = require('./lib/agent');
 
 module.exports = function concurixjs(options){
   var defaultOptions = {
-    port: 6788,
+    frontendPort: 6788,
     forceRestart: true,    
-    ipcSocketPath: '/tmp/concurix.sock',
+    ipcSocketPath: __dirname + '/concurix.sock',
     accountKey: '28164101-1362-769775-170247',
     hostname: os.hostname(),
     archiveSessionUrl: 'http://api.concurix.com/v1/bench/new_offline_run',
     maxAge: 15,
     useContext: 'true',
+    logsPath: null,
     //tracer's options
-    tracerEnabled: true,
+    enableTracer: true,
     clearModulesCache: true,
     whitelistedModules: null,
     blacklistedModules: ['util', 'cluster', 'console', 'rfile', 'callsite', 'browserify-middleware'],
+    //debugger's options
+    enableDebugger: true,
+    v8Port: 5858,
+    debuggeePid: process.pid
   };
   
   options = options || {};
