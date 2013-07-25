@@ -18,7 +18,7 @@ module.exports = function concurixjs(options){
   var defaultOptions = {
     frontendPort: 6788,
     forceRestart: true,    
-    ipcSocketPath: __dirname + '/concurix.sock',
+    ipcSocketPath: '/tmp/concurix.sock',
     accountKey: '28164101-1362-769775-170247',
     hostname: os.hostname(),
     archiveSessionUrl: 'http://api.concurix.com/v1/bench/new_offline_run',
