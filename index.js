@@ -7,7 +7,7 @@
 // The Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 //
-// Concurix Tracer Public API
+// Concurixjs Public API
 
 'use strict';
 
