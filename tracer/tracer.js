@@ -44,7 +44,8 @@ function Tracer(options){
   this.blacklistedModules = options.blacklistedModules;
   this.whitelistedModules = options.whitelistedModules;
   
-  this.wrapRequire();
+  // TODO move to 'start' function
+  // this.wrapRequire();
   
   this.cxEmit = this.emit;
   this.newFrame = true;

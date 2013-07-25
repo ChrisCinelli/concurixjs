@@ -12,31 +12,33 @@
 'use strict';
 
 var os = require('os');
-var Tracer = require('./tracer');
-var util = require('./tracer/util.js');
-var extend = util.extend;
+var Agent = require('./lib/agent');
 
-exports.tracer = tracer;
-
-function tracer(options){
+module.exports = function concurixjs(options){
   var defaultOptions = {
     port: 6788,
-    forceRestart: true,
-    blacklistedModules: ['util', 'cluster', 'console', 'rfile', 'callsite', 'browserify-middleware'],
-    clearModulesCache: true,
+    forceRestart: true,    
     ipcSocketPath: '/tmp/concurix.sock',
     accountKey: '28164101-1362-769775-170247',
     hostname: os.hostname(),
     archiveSessionUrl: 'http://api.concurix.com/v1/bench/new_offline_run',
     maxAge: 15,
-    useContext: 'true'
+    useContext: 'true',
+    //tracer's options
+    tracerEnabled: true,
+    clearModulesCache: true,
+    whitelistedModules: null,
+    blacklistedModules: ['util', 'cluster', 'console', 'rfile', 'callsite', 'browserify-middleware'],
   };
   
-  extend(defaultOptions, options);
-  var tracer = new Tracer(defaultOptions);
+  options = options || {};
+  Object.keys(options).forEach(function(name){
+    defaultOptions[name] = options[name];
+  })
+  
+  var agent = new Agent(defaultOptions);
   return {
-    stop: function(){ tracer.pauseTracer() },
-    start: function(){ tracer.resumeTracer() },
-    terminate: function(){ tracer.terminate() }
+    stop: function(){ agent.start() },
+    start: function(){ agent.stop() }
   };
 }
