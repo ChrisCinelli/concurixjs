@@ -43,7 +43,7 @@ module.exports = function concurixjs(options){
   
   var agent = new Agent(defaultOptions);
   return {
-    stop: function(){ agent.start() },
-    start: function(){ agent.stop() }
+    stop: function(){ agent.stop() },
+    start: function(){ agent.start() }
   };
 }
