@@ -1,9 +1,9 @@
 # ConcurixJS
-Node.js Real-time Visual Profiler
+Node.js Real-time Visual Profiler and Debugger
 
 Moore's Law delivers more cores every year, but subtle chokepoints keep many applications from fully exploiting many-core chips.  Concurix builds trace analysis and visualization tools that make it easy for developers to pinpoint bottlenecks and uncork parallelism. We aim to deliver 10x or better price-performance gains to servers, data centers, and all other many-core systems.
 
-We will be releasing the results of our work to the open source community and as Concurix products.   This product helps Node.js developers to trace, visualize, and locate line-by-line software bottlenecks in their code.
+This concurixjs runtime includes a the realtime tracer and debugger for NodeJS.  These tools help Node.js developers in both day to day development as well as tracking down hard to find performance problems.  
 
 For more information, visit [www.concurix.com](http://www.concurix.com).
 
