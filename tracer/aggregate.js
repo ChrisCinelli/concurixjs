@@ -7,92 +7,39 @@
 // The Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 //
-// Background process to 'massage' trace data and handle clients connections
+// Aggregates traces from each cluster
 
-'use strict';
-
-var path = require('path');
+var EventEmitter = require('events').EventEmitter;
 var os = require('os');
-var Ipc = require('./ipc');
-var WebSocketServer = require('./server');
-var Archive = require('./archive');
-var cxUtil = require('./util.js');
-var log = cxUtil.log;
-var values = cxUtil.values;
-var Functions = require('./functions.js');
+var util = require('./util');
+var values = util.values;
+var log = util.log;
+var Functions = require('./functions');
 var version = require('../package.json').version;
 
-function BackgroundProcess(){
-  log('concurix.background: starting');
+module.exports = Aggregate;
 
-  this.listenParentProcess();
-  
-  var ipcSocketPath = process.env.ipcSocketPath;
-  this.ipc = new Ipc({ipcSocketPath: ipcSocketPath});
-
-  this.maxAge = process.env.maxAge;
-  this.useContext = (process.env.useContext == 'true');
-  
-  var self = this;
-  this.ipc.on('msg', function(msg){
-    self.onIpcMsg(msg);
-  });
-  
-  var port = process.env.serverPort;
-  this.server = new WebSocketServer({port: port});
-  this.broadcastTimer = setInterval(function(){
-    self.broadcast();
-  }, 2000);
-  
-  var archiveSessionUrl = process.env.archiveSessionUrl;
-  var accountKey = process.env.accountKey;
-  var hostname = process.env.hostname;
-
-  if (accountKey && hostname && archiveSessionUrl) {
-    this.archiveUrl = [archiveSessionUrl, accountKey, hostname].join('/');
-    Archive.init();
-  }
-  
+function Aggregate(config){
+  this.maxAge = config.maxAge;
+  this.useContext = config.useContext;  
   this.nodes = {};
   this.links = {};
-  
   // counting maps so we can do an easy aging algorithm
   this.ageNodes = {};
   this.ageLinks = {};
 
   Functions.parse_core_modules();
+  
+  this.broadcastTimer = setInterval(this.broadcast.bind(this), 2000);
 }
 
-BackgroundProcess.prototype.listenParentProcess = function listenParentProcess(){
-  var self = this;
+Aggregate.prototype = Object.create(EventEmitter.prototype);
 
-  process.on('SIGTERM', function(){
-    self.cleanUp();
-    process.exit();
-  });
-
-  process.on('disconnect', function() {
-    log('concurix.background: parent process crashed');
-    self.cleanUp();
-    process.exit();
-  });
-};
-
-BackgroundProcess.prototype.cleanUp = function cleanUp(){
-  this.ipc.close();
+Aggregate.prototype.stop = function stop(){
   clearInterval(this.broadcastTimer);
-  this.server.close();
-  this.nodes = {};
-  this.links = {};
-};
+}
 
-BackgroundProcess.prototype.onIpcMsg = function onIpcMsg(msg){
-  switch(msg.cxCmd){
-    case 'frame': this.onFrame(msg.frame);
-  }
-};
-
-BackgroundProcess.prototype.onFrame = function onFrame(frame){
+Aggregate.prototype.frame = function frame(frame){
   var key, new_link, old_link, new_node, old_node, filename;
 
   if (this.useContext) {
@@ -148,29 +95,25 @@ BackgroundProcess.prototype.onFrame = function onFrame(frame){
   }
 };
 
-BackgroundProcess.prototype.broadcast = function broadcast(){
-  if (!this.server) return;
+Aggregate.prototype.broadcast = function broadcast(){
   var msg = {
     type: "nodejs",
     version: version,
     // run_id: 'to be set',
     load_avg: os.loadavg(), //array of 1, 5, and 15 minute load averages
     cpus: os.cpus(),
-    timestamp: cxUtil.unixTimeSec(),
+    timestamp: util.unixTimeSec(),
     data: {
       nodes: values(this.nodes),
       links: values(this.links)
     }
   };
-  var json = JSON.stringify(msg);
-  this.server.broadcast(json);
-  if (this.archiveUrl){
-    Archive.archive(json, this.archiveUrl);
-  }
+  
+  this.emit('data', msg);
   this.resetTraceEvents();
 };
 
-BackgroundProcess.prototype.resetTraceEvents = function resetTraceEvents(){
+Aggregate.prototype.resetTraceEvents = function resetTraceEvents(){
   var links = this.links;
   var nodes = this.nodes;
   var ageLinks = this.ageLinks;
@@ -200,5 +143,3 @@ BackgroundProcess.prototype.resetTraceEvents = function resetTraceEvents(){
     }
   }
 };
-
-new BackgroundProcess();

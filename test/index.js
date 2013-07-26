@@ -12,7 +12,7 @@
 var assert = require('assert');
 var cluster = require('cluster');
 var concurix = require('../index.js');
-var cxUtil = require('../lib/util.js');
+var cxUtil = require('../tracer/util.js');
 var log = cxUtil.log;
 var sleep = cxUtil.sleep;
 
@@ -20,7 +20,7 @@ var tests = {}
 
 tests.testWrapper = function testWrapper(doneCallback){
   
-  var wrap = require('../lib/wrapper.js').wrap;
+  var wrap = require('../tracer/wrapper.js').wrap;
   
   //define a guinea pig function
   function addOne(n){

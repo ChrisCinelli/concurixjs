@@ -44,8 +44,6 @@ function Tracer(options){
   this.blacklistedModules = options.blacklistedModules;
   this.whitelistedModules = options.whitelistedModules;
   
-  this.wrapRequire();
-  
   this.cxEmit = this.emit;
   this.newFrame = true;
 }
@@ -58,6 +56,9 @@ Tracer.prototype.stop = function stop(){
 
 Tracer.prototype.start = function start(){
   this.running = true;
+  if (!this.origRequire){
+    this.wrapRequire();
+  }
 }
 
 Tracer.prototype.wrapRequire = function wrapRequire(){
