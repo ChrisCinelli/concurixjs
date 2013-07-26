@@ -19,9 +19,10 @@ module.exports = function concurixjs(options){
     frontendPort: 6788,
     forceRestart: true,    
     ipcSocketPath: '/tmp/concurix.sock',
-    accountKey: '28164101-1362-769775-170247',
     hostname: os.hostname(),
-    archiveSessionUrl: 'http://api.concurix.com/v1/bench/new_offline_run',
+    archiveHost: 'api.concurix.com', // Change to localhost for local testing
+    archivePort: 80,
+    accountKey: '28164101-1362-769775-170247',
     maxAge: 15,
     useContext: 'true',
     logsPath: null,
