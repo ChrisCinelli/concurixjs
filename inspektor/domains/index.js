@@ -7,7 +7,12 @@
 // The Software distributed under the License is distributed on an "AS IS"
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 
-var log = require('./../util.js').log;
+// - https://code.google.com/p/v8/wiki/DebuggerProtocol
+// - https://developers.google.com/chrome-developer-tools/docs/protocol/1.0/page
+// - http://localhost:9999/inspector.html?host=localhost:9999&page=0
+// - https://developer.chrome.com/trunk/extensions/debugger.html
+
+var log = console.log.bind(console);
 
 function Domains(config){
   var domainsList = ['Domain', 'Debugger', 'CSS', 'Network', 'Page', 'Console', 'Inspector', 'Profiler'];

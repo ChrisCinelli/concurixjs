@@ -10,7 +10,7 @@
 var Protocol = require('_debugger').Protocol;
 var net = require('net');
 var EventEmitter = require('events').EventEmitter;
-var log = require('../../util.js').log;
+var log = console.log.bind(console);
 
 function V8Debugger(v8Port, debuggeePid){
   this.v8Port = v8Port;

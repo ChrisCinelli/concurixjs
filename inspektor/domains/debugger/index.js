@@ -8,7 +8,7 @@
 // basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 
 var Domain = require('../domain.js');
-var log = require('../../util.js').log;
+var log = console.log.bind(console);
 var V8Debugger = require('./v8debugger.js');
 var translate = require('./translate.js');
 
@@ -52,7 +52,18 @@ proto._onScripts = function _onScripts(rsp, err){
   });
 };
 
+// var first = true;
 proto._onBreak = function _onBreak(rsp){
+  // if (first) {
+  //   var req = this.v8debugger.createRequest({
+  //     command: 'continue'
+  //   });
+  // 
+  //   var self = this;
+  //   this.v8debugger.send(req);
+  //   first = false;
+  //   return;
+  // }
   this._notifyBreakEvent('other');
 };
 
