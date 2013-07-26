@@ -1,7 +1,7 @@
 {
   "name": "concurixjs",
   "description": "Node.js Real-time Visual Profiler",
-  "version": "0.1.10",
+  "version": "0.2.0",
   "keywords": [
     "trace",
     "tracing",
@@ -22,7 +22,8 @@
     "metrics",
     "concurix",
     "multicore",
-    "manycore"
+    "manycore",
+    "debugger"
   ],
   "main": "index.js",
   "repository": {

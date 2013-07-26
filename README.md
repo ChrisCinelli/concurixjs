@@ -15,7 +15,8 @@ For more information, visit [www.concurix.com](http://www.concurix.com).
 1. Include the following snippet before any other ``require`` statement:
 
  ```js
- var tracer = require('concurixjs').tracer();
+ var concurixjs = require('concurixjs')();
+ concurixjs.start();
  ```
 
 2. Run your app
