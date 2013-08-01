@@ -100,10 +100,12 @@ exports.wrap = function wrap(func, beforeHook, afterHook, globalState) {
   
   if( typeof v8debug != "undefined" ){
     script = v8debug.Debug.findScript(func);
-    file = script ? script.name : "native";
-    if( file != "native"){
-      loc = v8debug.Debug.findFunctionSourceLocation(func);      
-    }    
+    if (!script){
+      // do not wrap native code or extensions
+      return func;
+    }
+    file = script.name;
+    loc = v8debug.Debug.findFunctionSourceLocation(func);
     proxyId = file + ":" + loc.position;
     callerMod = globalState.module;
     globalState.module = {
@@ -112,6 +114,11 @@ exports.wrap = function wrap(func, beforeHook, afterHook, globalState) {
       id: file
     };
   } else {
+    // do not wrap native code or extensions
+    var func_src = func.toString();
+    if (func_src.match(/\{ \[native code\] \}$/)){
+      return func;
+    }
     // if we don't have the v8debug info, then treat every proxy as unique to the module
     proxyId = globalState.module ? globalState.module.id : "unknown";
   }

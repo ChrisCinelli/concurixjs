@@ -30,7 +30,7 @@ module.exports = function concurixjs(options){
     enableTracer: true,
     clearModulesCache: true,
     whitelistedModules: null,
-    blacklistedModules: ['util', 'cluster', 'console', 'rfile', 'callsite', 'browserify-middleware'],
+    blacklistedModules: ['util', 'cluster', 'console', 'rfile', 'callsite', 'browserify-middleware', 'bindings'],
     //debugger's options
     enableDebugger: true,
     v8Port: 5858,

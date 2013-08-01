@@ -112,7 +112,9 @@ Tracer.prototype.requireAfterHook = function requireAfterHook(trace, globalState
     top: this.getRequireTop(trace)
   };
   
-  var shouldWrapExports = !this.isModuleBlacklisted(_module.requireId) &&
+  var isNativeExtension = (_module.requireId || '').match(/\.node$/);
+  var shouldWrapExports = !isNativeExtension && 
+      !this.isModuleBlacklisted(_module.requireId) &&
       (globalState.whitelisted > 0);
   
   if(shouldWrapExports){
