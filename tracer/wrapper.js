@@ -16,12 +16,16 @@ var util = require('./util.js');
 var extend = util.extend;
 var log = util.log;
 var proxyCounter = 0;
+// to avoid tracing and wrapping itself 'block_tracing' acts as a semaphore 
+// which is set to 'true' when it's in concurixjs code and 'false' when in user's code
+var block_tracing = false;
 
 var concurixProxy = function (){
-  if (this.__concurix_obj__){
+  if (block_tracing){
     return func.apply(this, arguments);
   }
   
+  block_tracing = true;
   var trace = {};
   var rethrow = null;
   var doRethrow = false;
@@ -48,6 +52,7 @@ var concurixProxy = function (){
   extend(func, proxy);
   var startMem = process.memoryUsage().heapUsed;
   try{
+    block_tracing = false;
     var ret = func.apply(this, arguments);
   } catch (e) {
     // it's a bit unfortunate we have to catch and rethrow these, but some nodejs modules like
@@ -55,6 +60,7 @@ var concurixProxy = function (){
     rethrow = e;
     doRethrow = true; // Amazon uses null exceptions as part of their normal flow control, handle that case
   }
+  block_tracing = true;
   //save return value, exec time and call afterHook
   try {
     trace.memDelta = process.memoryUsage().heapUsed - startMem;
@@ -65,10 +71,10 @@ var concurixProxy = function (){
   } catch(e) {
     log('concurix.wrapper afterHook: error', e);
   }
+  block_tracing = false;
   if( doRethrow ){
     throw rethrow;
   }
-  
   return trace.ret;
 };
 

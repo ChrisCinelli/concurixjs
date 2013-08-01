@@ -28,8 +28,6 @@ module.exports = Tracer;
 
 function Tracer(options){
   options = options || {};
-  this.__concurix_obj__ = true;
-  console.__concurix_obj__ = true;
   this.nestStack = [];
   this.nestRequire = [];
   this.wrap = wrap;
