@@ -1,7 +1,7 @@
 {
   "name": "concurixjs",
-  "description": "Node.js Real-time Visual Profiler",
-  "version": "0.2.2",
+  "description": "Node.js Real-time Visual Profiler and Debugger",
+  "version": "0.2.3",
   "keywords": [
     "trace",
     "tracing",
