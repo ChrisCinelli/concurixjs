@@ -112,12 +112,11 @@ tests.testEventEmitterInheritance = function testEventEmitterInheritance(doneCal
 }
 
 ////////////////////////////////////////////////
-var tracer = concurix.tracer({
-  port: 0,
-  blacklistedModules: ['util'],
-  traceName: 'testApp',
-  accountKey: ""
-});
+var tracer = concurix({
+  forceRestart: false,
+  archiveHost: null,
+})
+tracer.start();
 sleep(200);
 
 var proto = Object.getPrototypeOf(module);
@@ -127,7 +126,8 @@ function testEngine(testSteps){
   // try {
     if (testSteps.length == 0) {
       sleep(200);
-      tracer.terminate();
+      log('====== DONE ======');
+      tracer.stop();
       return;
     }
     
