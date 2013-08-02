@@ -22,38 +22,38 @@ var block_tracing = false;
 
 var concurixProxy = function (){
   if (block_tracing){
-    return func.apply(this, arguments);
+    return cxOrigFuncToWrap.apply(this, arguments);
   }
   
   block_tracing = true;
   var trace = {};
   var rethrow = null;
   var doRethrow = false;
-  //save caller info and call beforeHook
+  //save caller info and call cxBeforeHook
   try {
     //WEIRD BEHAVIOR ALERT:  the nodejs debug module gives us line numbers that are zero index based; add 1
     trace.line = loc.line + 1;
     trace.processId = process.pid;
     trace.id = proxyId;
-    trace.functionName = func.name || 'anonymous';
+    trace.functionName = cxOrigFuncToWrap.name || 'anonymous';
     trace.args = arguments;
-    // WARNING: start time is not accurate as it includes beforeHook excecution
+    // WARNING: start time is not accurate as it includes cxBeforeHook excecution
     // this is done to have approximate start time required in calculating total_delay in bg process
     trace.startTime = process.hrtime();
     // trace.wrappedThis = this;
-    if(beforeHook) beforeHook.call(self, trace, globalState);
+    if(cxBeforeHook) cxBeforeHook.call(self, trace, globalState);
   } catch(e) {
-    log('concurix.wrapper beforeHook: error', e);
+    log('concurix.wrapper cxBeforeHook: error', e);
   }
   
   // Re-calculate accurate start time so we get accurate execTime
   var startTime = process.hrtime();
   //re-assign any properties back to the original function
-  extend(func, proxy);
+  extend(cxOrigFuncToWrap, proxy);
   var startMem = process.memoryUsage().heapUsed;
   try{
     block_tracing = false;
-    var ret = func.apply(this, arguments);
+    var ret = cxOrigFuncToWrap.apply(this, arguments);
   } catch (e) {
     // it's a bit unfortunate we have to catch and rethrow these, but some nodejs modules like
     // fs use exception handling as flow control for normal cases vs true exceptions.
@@ -61,15 +61,15 @@ var concurixProxy = function (){
     doRethrow = true; // Amazon uses null exceptions as part of their normal flow control, handle that case
   }
   block_tracing = true;
-  //save return value, exec time and call afterHook
+  //save return value, exec time and call cxAfterHook
   try {
     trace.memDelta = process.memoryUsage().heapUsed - startMem;
     trace.ret = ret;
     trace.startTime = startTime;
     trace.execTime = process.hrtime(startTime);
-    if (afterHook) afterHook.call(self, trace, globalState);
+    if (cxAfterHook) cxAfterHook.call(self, trace, globalState);
   } catch(e) {
-    log('concurix.wrapper afterHook: error', e);
+    log('concurix.wrapper cxAfterHook: error', e);
   }
   block_tracing = false;
   if( doRethrow ){
@@ -78,14 +78,14 @@ var concurixProxy = function (){
   return trace.ret;
 };
 
-exports.wrap = function wrap(func, beforeHook, afterHook, globalState) {
-  if (func.__concurix_wrapped_by__){
-    extend(func.__concurix_wrapped_by__, func);
-    return func.__concurix_wrapped_by__;
+exports.wrap = function wrap(cxOrigFuncToWrap, cxBeforeHook, cxAfterHook, globalState) {
+  if (cxOrigFuncToWrap.__concurix_wrapped_by__){
+    extend(cxOrigFuncToWrap.__concurix_wrapped_by__, cxOrigFuncToWrap);
+    return cxOrigFuncToWrap.__concurix_wrapped_by__;
   }
   
-  if (func.__concurix_wrapper_for__) {
-    return func;
+  if (cxOrigFuncToWrap.__concurix_wrapper_for__) {
+    return cxOrigFuncToWrap;
   } 
   
   var self = this;
@@ -99,13 +99,13 @@ exports.wrap = function wrap(func, beforeHook, afterHook, globalState) {
   };
   
   if( typeof v8debug != "undefined" ){
-    script = v8debug.Debug.findScript(func);
+    script = v8debug.Debug.findScript(cxOrigFuncToWrap);
     if (!script){
       // do not wrap native code or extensions
-      return func;
+      return cxOrigFuncToWrap;
     }
     file = script.name;
-    loc = v8debug.Debug.findFunctionSourceLocation(func);
+    loc = v8debug.Debug.findFunctionSourceLocation(cxOrigFuncToWrap);
     proxyId = file + ":" + loc.position;
     callerMod = globalState.module;
     globalState.module = {
@@ -115,24 +115,24 @@ exports.wrap = function wrap(func, beforeHook, afterHook, globalState) {
     };
   } else {
     // do not wrap native code or extensions
-    var func_src = func.toString();
+    var func_src = cxOrigFuncToWrap.toString();
     if (func_src.match(/\{ \[native code\] \}$/)){
-      return func;
+      return cxOrigFuncToWrap;
     }
     // if we don't have the v8debug info, then treat every proxy as unique to the module
     proxyId = globalState.module ? globalState.module.id : "unknown";
   }
 
   // keep the original func name using eval
-  var orgFuncName = func.name || 'anonymous';
+  var orgFuncName = cxOrigFuncToWrap.name || 'anonymous';
   proxyStr = concurixProxy.toString().replace(/^function/, 'function ' + orgFuncName);
   eval("var proxy = " + proxyStr);
   
-  extend(proxy, func);
-  proxy.prototype = func.prototype;
+  extend(proxy, cxOrigFuncToWrap);
+  proxy.prototype = cxOrigFuncToWrap.prototype;
   proxy.__concurix_wrapper_for__ = orgFuncName;
   // proxy.__concurix_fun_code__ = func.toString();
-  func.__concurix_wrapped_by__ = proxy;  
+  cxOrigFuncToWrap.__concurix_wrapped_by__ = proxy;  
   return proxy;
 }
 
